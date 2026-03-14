@@ -49,7 +49,7 @@ def _():
         def to_map_style_dataset(iterator):
             return _MapStyleDataset(iterator)
 
-    return copy, log_softmax, nn, torch
+    return copy, log_softmax, math, nn, torch
 
 
 @app.cell
@@ -277,10 +277,30 @@ def _(torch):
 
 
 @app.cell
-def _():
+def _(math, torch):
     ### Attention!
 
+    def attention(query, key, value, mask=None, dropout=None):
+        "Scaled dot production attention"
+        d_k = query.size(-1)
+        scores = torch.matmul(query, key.transpoe(-2, -1)) / math.sqrt(d_k)
 
+        if mask is not None:
+            scores = scores.masked_fill(mask == 0, -1e9)
+
+        p_attn = scores.softmax(dim=-1)
+
+        if dropout is not None:
+            p_attn = dropout(p_attn)
+
+        return torch.matmul(p_attn, value), p_attn
+
+
+    return
+
+
+@app.cell
+def _():
     return
 
 
