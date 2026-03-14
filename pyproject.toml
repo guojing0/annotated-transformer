@@ -1,0 +1,20 @@
+[project]
+name = "annotated-transformer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "altair>=6.0.0",
+    "black>=26.3.1",
+    "flake8>=7.3.0",
+    "gputil>=1.4.0",
+    "jupytext>=1.19.1",
+    "marimo[recommended]>=0.20.4",
+    "pandas>=3.0.1",
+    "spacy>=3.8.11",
+    "torch>=2.10.0",
+    "torchdata>=0.11.0",
+    "torchtext>=0.6.0",
+    "wandb>=0.25.1",
+]
