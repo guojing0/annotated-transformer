@@ -41,7 +41,6 @@ def _():
     from torchtext.vocab import build_vocab_from_iterator
     import torchtext.datasets as datasets
     import spacy
-    import GPUtil
     import warnings
     from torch.utils.data.distributed import DistributedSampler
     import torch.distributed as dist

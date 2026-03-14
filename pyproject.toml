@@ -12,6 +12,7 @@ dependencies = [
     "jupytext>=1.19.1",
     "marimo[recommended]>=0.20.4",
     "pandas>=3.0.1",
+    "setuptools>=82.0.1",
     "spacy>=3.8.11",
     "torch>=2.10.0",
     "torchdata>=0.11.0",
