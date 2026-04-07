@@ -830,6 +830,7 @@ def _(
     TGT_LANG = "en"
     SPECIAL_TOKENS = ["<s>", "</s>", "<blank>", "<unk>"]
 
+    # Keep canonical paper-like settings and a lighter local profile for Apple Silicon.
     PART3_CONFIGS = {
         "paper_default": {
             "N": 6,
@@ -872,6 +873,7 @@ def _(
     }
 
     def get_device():
+        # MPS first for Apple Silicon, then CUDA, then CPU fallback.
         if torch.backends.mps.is_available():
             return torch.device("mps")
         if torch.cuda.is_available():
@@ -888,6 +890,7 @@ def _(
         return PART3_CONFIGS[config_profile].copy()
 
     def load_hf_multi30k():
+        # Hugging Face copy of the classic Multi30k German-English benchmark.
         dataset = load_dataset("bentrevett/multi30k")
         required_splits = {"train", "validation", "test"}
         missing_splits = required_splits.difference(dataset.keys())
@@ -896,6 +899,7 @@ def _(
         return dataset["train"], dataset["validation"], dataset["test"]
 
     def _train_wordlevel_tokenizer(text_iterator, min_frequency):
+        # WordLevel + whitespace reproduces simple word tokenization in a modern stack.
         tokenizer = Tokenizer(WordLevel(unk_token="<unk>"))
         tokenizer.pre_tokenizer = Whitespace()
         trainer = WordLevelTrainer(
@@ -906,6 +910,7 @@ def _(
         return tokenizer
 
     def _tokenizer_paths(cache_dir):
+        # Persist tokenizers to avoid rebuilding on every run.
         cache_path = Path(cache_dir)
         return (
             cache_path / "multi30k_de_wordlevel.json",
@@ -940,6 +945,7 @@ def _(
         return src_tokenizer, tgt_tokenizer
 
     def _special_ids(tokenizer):
+        # Centralized lookup so all downstream code uses consistent special IDs.
         token_ids = {}
         for token in SPECIAL_TOKENS:
             token_id = tokenizer.token_to_id(token)
@@ -962,6 +968,7 @@ def _(
         max_padding,
         device,
     ):
+        # Sequence format is: <s> tokens </s>, then right-pad/truncate to fixed length.
         token_ids = tokenizer.encode(text).ids
         token_ids = [bos_id] + token_ids + [eos_id]
         if len(token_ids) > max_padding:
@@ -985,6 +992,7 @@ def _(
         device,
         max_padding=128,
     ):
+        # Convert raw HF rows into fixed-size tensors compatible with Batch/masking code.
         src_batch = []
         tgt_batch = []
         for row in batch:
@@ -1024,6 +1032,7 @@ def _(
         max_train_sentences=None,
         max_valid_sentences=None,
     ):
+        # Optional split slicing makes smoke tests and local experimentation fast.
         train_data = _slice_split(train_split, max_train_sentences)
         valid_data = _slice_split(valid_split, max_valid_sentences)
 
@@ -1058,6 +1067,7 @@ def _(
         return train_dataloader, valid_dataloader
 
     def _build_model_from_config(src_vocab_size, tgt_vocab_size, config, device):
+        # Model architecture comes from existing make_model; this only wires config values.
         model = make_model(
             src_vocab_size,
             tgt_vocab_size,
@@ -1073,6 +1083,7 @@ def _(
         config_profile="local_mps",
         force_rebuild_tokenizers=False,
     ):
+        # End-to-end Part 3 training entrypoint.
         config = _resolve_config(config_profile)
         device = get_device()
         print(f"Using device: {device}")
@@ -1114,6 +1125,7 @@ def _(
             betas=(0.9, 0.98),
             eps=1e-9,
         )
+        # Same schedule form used in the original tutorial/paper discussion.
         lr_scheduler = LambdaLR(
             optimizer=optimizer,
             lr_lambda=lambda step: rate(
@@ -1173,6 +1185,7 @@ def _(
         force_retrain=False,
         force_rebuild_tokenizers=False,
     ):
+        # Reuse existing checkpoint unless retraining is explicitly requested.
         config = _resolve_config(config_profile)
         device = get_device()
 
@@ -1214,6 +1227,7 @@ def _(
         return model, src_tokenizer, tgt_tokenizer, valid_dataloader, config, device
 
     def _tokens_from_ids(tokenizer, token_ids, pad_id, eos_token="</s>"):
+        # Convert token IDs back to readable text tokens for quick qualitative checks.
         tokens = []
         for token_id in token_ids:
             token_id = int(token_id)
@@ -1234,6 +1248,7 @@ def _(
         tgt_tokenizer,
         n_examples=5,
     ):
+        # Greedy decode samples from validation to inspect translation quality.
         src_pad_id = src_tokenizer.token_to_id("<blank>")
         tgt_pad_id = tgt_tokenizer.token_to_id("<blank>")
         if src_pad_id != tgt_pad_id:
@@ -1311,6 +1326,7 @@ def _(
         )
 
     def run_part3_data_checks(config_profile="local_mps"):
+        # Lightweight validations: dataset shape, tokenizer IDs, batch/mask integrity.
         config = _resolve_config(config_profile)
         train_split, valid_split, test_split = load_hf_multi30k()
         assert len(train_split) > 0 and len(valid_split) > 0 and len(test_split) > 0
@@ -1359,6 +1375,7 @@ def _(
         }
 
     def run_part3_training_smoke():
+        # One short run to verify the training path without paying full epoch cost.
         smoke_config = _resolve_config("local_mps")
         smoke_config["num_epochs"] = 1
         smoke_config["batch_size"] = 4
@@ -1371,16 +1388,13 @@ def _(
             raise RuntimeError("Smoke training did not produce final checkpoint.")
         return str(checkpoint_path)
 
-    return run_part3_data_checks, run_part3_training_smoke, train_model
+    return (train_model,)
 
 
 @app.cell
-def _(run_part3_data_checks, run_part3_training_smoke, train_model):
-    run_part3_data_checks("local_mps")          # optional sanity checks
-    run_part3_training_smoke()                  # optional 1-epoch tiny smoke run
+def _(train_model):
     train_model("local_mps")                    # full training loop
     # or: train_model("paper_default")
-
     return
 
 
