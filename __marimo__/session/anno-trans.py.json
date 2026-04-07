@@ -352,7 +352,7 @@
     },
     {
       "id": "nHfw",
-      "code_hash": "3898030ab785db4cd9e00f5f61d1c0ba",
+      "code_hash": "41d1e9d9207d902f0f16dd83ca22a5dd",
       "outputs": [
         {
           "type": "data",
@@ -366,18 +366,25 @@
     {
       "id": "xXTn",
       "code_hash": "8251e1ac614765d25fa47612c13baae4",
-      "outputs": [],
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
       "console": [
         {
           "type": "stream",
           "name": "stdout",
-          "text": "Using device: mps\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   3.49 | Tokens / Sec:   443.3 | Learning Rate: 5.5e-06\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   2.02 | Tokens / Sec:  6012.6 | Learning Rate: 6.1e-05\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.73 | Tokens / Sec:  6061.4 | Learning Rate: 1.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.50 | Tokens / Sec:  5973.9 | Learning Rate: 1.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.29 | Tokens / Sec:  6011.2 | Learning Rate: 2.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.78 | Tokens / Sec:  5999.2 | Learning Rate: 2.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.55 | Tokens / Sec:  5993.9 | Learning Rate: 3.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.42 | Tokens / Sec:  6003.5 | Learning Rate: 3.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.25 | Tokens / Sec:  5950.4 | Learning Rate: 4.5e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.14 | Tokens / Sec:  6034.2 | Learning Rate: 5.0e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.11 | Tokens / Sec:  6016.5 | Learning Rate: 5.6e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  4290.5 | Learning Rate: 6.1e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.22 | Tokens / Sec:  5090.9 | Learning Rate: 6.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  5169.8 | Learning Rate: 7.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.16 | Tokens / Sec:  5440.9 | Learning Rate: 7.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.16 | Tokens / Sec:  5477.8 | Learning Rate: 8.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.18 | Tokens / Sec:  5229.0 | Learning Rate: 8.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.12 | Tokens / Sec:  4646.3 | Learning Rate: 9.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.10 | Tokens / Sec:  4657.9 | Learning Rate: 1.0e-03\n",
+          "text": "Using device: mps\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   3.01 | Tokens / Sec:  5498.8 | Learning Rate: 5.5e-06\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   2.07 | Tokens / Sec:  6067.0 | Learning Rate: 6.1e-05\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.71 | Tokens / Sec:  6042.2 | Learning Rate: 1.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.42 | Tokens / Sec:  6013.8 | Learning Rate: 1.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.17 | Tokens / Sec:  5609.0 | Learning Rate: 2.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.77 | Tokens / Sec:  6015.2 | Learning Rate: 2.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.44 | Tokens / Sec:  6294.7 | Learning Rate: 3.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.29 | Tokens / Sec:  6184.6 | Learning Rate: 3.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.22 | Tokens / Sec:  5773.6 | Learning Rate: 4.5e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  6130.6 | Learning Rate: 5.0e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.14 | Tokens / Sec:  6348.5 | Learning Rate: 5.6e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.27 | Tokens / Sec:  6258.6 | Learning Rate: 6.1e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.16 | Tokens / Sec:  6351.5 | Learning Rate: 6.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.06 | Tokens / Sec:  6346.4 | Learning Rate: 7.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  6250.8 | Learning Rate: 7.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.24 | Tokens / Sec:  6356.5 | Learning Rate: 8.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.10 | Tokens / Sec:  6355.0 | Learning Rate: 8.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.20 | Tokens / Sec:  6247.4 | Learning Rate: 9.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.11 | Tokens / Sec:  6317.8 | Learning Rate: 1.0e-03\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.10 | Tokens / Sec:  6325.7 | Learning Rate: 1.1e-03\ntensor([[0, 9, 3, 3, 4, 5, 6, 7, 8, 9]], device='mps:0')\n",
           "mimetype": "text/plain"
         }
       ]
     },
     {
-      "id": "AjVT",
+      "id": "HCGx",
       "code_hash": null,
       "outputs": [],
       "console": []
