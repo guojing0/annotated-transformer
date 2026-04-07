@@ -7,7 +7,7 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "4e43f71e7dad0b662c06a808c1bb6f8f",
+      "code_hash": "3db44c2d3174b52004963094a508ebea",
       "outputs": [
         {
           "type": "data",
@@ -19,7 +19,7 @@
       "console": []
     },
     {
-      "id": "mEAf",
+      "id": "MJUe",
       "code_hash": "6bbf4679e2c1bca015c3acfb0cb59b7b",
       "outputs": [
         {
@@ -32,7 +32,7 @@
       "console": []
     },
     {
-      "id": "vMtA",
+      "id": "vblA",
       "code_hash": "dccfb801bf383ca6a4219ebe2c4dba0c",
       "outputs": [
         {
@@ -45,7 +45,7 @@
       "console": []
     },
     {
-      "id": "vHyn",
+      "id": "bkHC",
       "code_hash": "d48b2e3f491b951636587eea0e7afcce",
       "outputs": [
         {
@@ -58,8 +58,8 @@
       "console": []
     },
     {
-      "id": "gvqw",
-      "code_hash": "dfc3a71651a0f95b89b9a51c409ccea3",
+      "id": "lEQa",
+      "code_hash": "9538e3f1057efca91de72d932052666a",
       "outputs": [
         {
           "type": "data",
@@ -71,7 +71,7 @@
       "console": []
     },
     {
-      "id": "QXWB",
+      "id": "PKri",
       "code_hash": "935ff0fdad4b4b7b644d7e43131a2822",
       "outputs": [
         {
@@ -84,7 +84,7 @@
       "console": []
     },
     {
-      "id": "LptO",
+      "id": "Xref",
       "code_hash": "b17d9d870788f22ca7a66aa1cffded62",
       "outputs": [
         {
@@ -97,7 +97,7 @@
       "console": []
     },
     {
-      "id": "RLAg",
+      "id": "SFPL",
       "code_hash": "2d27bfceb68559f951a16dbcb1dbee0b",
       "outputs": [
         {
@@ -110,7 +110,7 @@
       "console": []
     },
     {
-      "id": "NYRu",
+      "id": "BYtC",
       "code_hash": "147634b793394848f25828054dc507dc",
       "outputs": [
         {
@@ -123,7 +123,7 @@
       "console": []
     },
     {
-      "id": "pOqx",
+      "id": "RGSE",
       "code_hash": "c95e1eb825ac98b7a11e2ca683f9d47c",
       "outputs": [
         {
@@ -136,7 +136,7 @@
       "console": []
     },
     {
-      "id": "UXow",
+      "id": "Kclp",
       "code_hash": "e3faa4b7dd0cfc48510acb550d830217",
       "outputs": [
         {
@@ -149,7 +149,7 @@
       "console": []
     },
     {
-      "id": "dpwd",
+      "id": "emfo",
       "code_hash": "87245263e3bfec272aa5d2127d81ef2a",
       "outputs": [
         {
@@ -162,7 +162,7 @@
       "console": []
     },
     {
-      "id": "sBuv",
+      "id": "Hstk",
       "code_hash": "b0322aa9ba9fc83d7923fbf7425ef7a8",
       "outputs": [
         {
@@ -175,7 +175,7 @@
       "console": []
     },
     {
-      "id": "FqIX",
+      "id": "nWHF",
       "code_hash": "407b01f930b8b17b3d232da01e670459",
       "outputs": [
         {
@@ -188,7 +188,7 @@
       "console": []
     },
     {
-      "id": "YuCz",
+      "id": "iLit",
       "code_hash": "d21fa6dca1375330d165408daaadd773",
       "outputs": [
         {
@@ -201,7 +201,7 @@
       "console": []
     },
     {
-      "id": "PGpw",
+      "id": "ZHCJ",
       "code_hash": "c78ab9c6111f5ed681d545daa5633b8b",
       "outputs": [
         {
@@ -214,7 +214,7 @@
       "console": []
     },
     {
-      "id": "Ndlk",
+      "id": "ROlb",
       "code_hash": "ac4957d33e1cdb3cec95e964c96f7848",
       "outputs": [
         {
@@ -227,8 +227,8 @@
       "console": []
     },
     {
-      "id": "Usan",
-      "code_hash": "1c87c8844bf1c874d693ff0e2bfd0fc5",
+      "id": "qnkX",
+      "code_hash": "262265329796ba12a0e739834d7f775c",
       "outputs": [
         {
           "type": "data",
@@ -241,13 +241,143 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "Example Untrained Model Prediction: tensor([[ 0, 10, 10, 10, 10, 10, 10, 10, 10, 10]])\nExample Untrained Model Prediction: tensor([[0, 3, 0, 3, 0, 3, 0, 3, 0, 3]])\nExample Untrained Model Prediction: tensor([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])\nExample Untrained Model Prediction: tensor([[0, 1, 2, 2, 2, 2, 2, 2, 2, 2]])\nExample Untrained Model Prediction: tensor([[0, 9, 8, 6, 6, 6, 6, 6, 6, 6]])\nExample Untrained Model Prediction: tensor([[0, 1, 6, 2, 2, 2, 2, 6, 5, 5]])\nExample Untrained Model Prediction: tensor([[ 0,  4,  4,  4, 10,  6,  6,  6,  6,  6]])\nExample Untrained Model Prediction: tensor([[ 0,  4,  9,  1,  7,  7, 10,  1,  7, 10]])\nExample Untrained Model Prediction: tensor([[ 0,  9,  9,  9,  5, 10,  4,  5,  5,  5]])\nExample Untrained Model Prediction: tensor([[ 0, 10,  1,  1,  1,  1,  1,  1, 10,  1]])\n",
+          "text": "Example Untrained Model Prediction: tensor([[0, 8, 5, 5, 5, 5, 5, 5, 5, 5]])\nExample Untrained Model Prediction: tensor([[0, 5, 5, 2, 2, 2, 2, 2, 2, 2]])\nExample Untrained Model Prediction: tensor([[ 0, 10,  9,  8,  1,  9,  9,  8,  1,  9]])\nExample Untrained Model Prediction: tensor([[ 0, 10,  2,  1,  1,  1,  1,  1,  1,  1]])\nExample Untrained Model Prediction: tensor([[0, 1, 2, 4, 4, 3, 4, 3, 4, 3]])\nExample Untrained Model Prediction: tensor([[0, 5, 8, 9, 9, 9, 9, 9, 9, 9]])\nExample Untrained Model Prediction: tensor([[0, 4, 4, 4, 4, 4, 4, 4, 4, 4]])\nExample Untrained Model Prediction: tensor([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])\nExample Untrained Model Prediction: tensor([[ 0,  6,  0,  6, 10,  1,  0,  1,  0,  1]])\nExample Untrained Model Prediction: tensor([[0, 3, 0, 0, 0, 0, 0, 0, 3, 3]])\n",
           "mimetype": "text/plain"
         }
       ]
     },
     {
-      "id": "XQkH",
+      "id": "TqIu",
+      "code_hash": "37830ed8f9fc225bf99f106393165f33",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Vxnm",
+      "code_hash": "efa8bf3edc7411d6c6f6f447ffaa1286",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "DnEU",
+      "code_hash": "617aae3fd1d739c5b0b5ee313a9007a6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ulZA",
+      "code_hash": "4f78412157f3780a1f4f0795952944c7",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ecfG",
+      "code_hash": "22e23c269acf1776b0ecc42ca786708d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.1.0.json\",\n  \"config\": {\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300\n    }\n  },\n  \"data\": {\n    \"name\": \"data-462a8ac05baef651a79f7b45de1311d5\"\n  },\n  \"datasets\": {\n    \"data-462a8ac05baef651a79f7b45de1311d5\": [\n      {\n        \"columns\": 0,\n        \"rows\": 0,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 0,\n        \"rows\": 1,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 0,\n        \"rows\": 2,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 0,\n        \"rows\": 3,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 0,\n        \"rows\": 4,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 1,\n        \"rows\": 0,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 1,\n        \"rows\": 1,\n        \"target distribution\": 0.6000000238418579\n      },\n      {\n        \"columns\": 1,\n        \"rows\": 2,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 1,\n        \"rows\": 3,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 1,\n        \"rows\": 4,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 2,\n        \"rows\": 0,\n        \"target distribution\": 0.6000000238418579\n      },\n      {\n        \"columns\": 2,\n        \"rows\": 1,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 2,\n        \"rows\": 2,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 2,\n        \"rows\": 3,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 2,\n        \"rows\": 4,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 3,\n        \"rows\": 0,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 3,\n        \"rows\": 1,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 3,\n        \"rows\": 2,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 3,\n        \"rows\": 3,\n        \"target distribution\": 0.6000000238418579\n      },\n      {\n        \"columns\": 3,\n        \"rows\": 4,\n        \"target distribution\": 0.6000000238418579\n      },\n      {\n        \"columns\": 4,\n        \"rows\": 0,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 4,\n        \"rows\": 1,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 4,\n        \"rows\": 2,\n        \"target distribution\": 0.0\n      },\n      {\n        \"columns\": 4,\n        \"rows\": 3,\n        \"target distribution\": 0.13333334028720856\n      },\n      {\n        \"columns\": 4,\n        \"rows\": 4,\n        \"target distribution\": 0.13333334028720856\n      }\n    ]\n  },\n  \"encoding\": {\n    \"color\": {\n      \"field\": \"target distribution\",\n      \"scale\": {\n        \"scheme\": \"viridis\"\n      },\n      \"type\": \"quantitative\"\n    },\n    \"x\": {\n      \"field\": \"columns\",\n      \"title\": null,\n      \"type\": \"ordinal\"\n    },\n    \"y\": {\n      \"field\": \"rows\",\n      \"title\": null,\n      \"type\": \"ordinal\"\n    }\n  },\n  \"height\": 200,\n  \"mark\": {\n    \"color\": \"Blue\",\n    \"opacity\": 1,\n    \"type\": \"rect\"\n  },\n  \"params\": [\n    {\n      \"bind\": \"scales\",\n      \"name\": \"param_1e9efca18e7a2868\",\n      \"select\": {\n        \"encodings\": [\n          \"x\",\n          \"y\"\n        ],\n        \"type\": \"interval\"\n      }\n    }\n  ],\n  \"usermeta\": {\n    \"embedOptions\": {}\n  },\n  \"width\": 200\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "b08140e573adc0c6c0c1d8faac63605a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "application/vnd.vegalite.v6+json": "{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v6.1.0.json\",\n  \"config\": {\n    \"view\": {\n      \"continuousHeight\": 300,\n      \"continuousWidth\": 300\n    }\n  },\n  \"data\": {\n    \"name\": \"data-8647f92b0be733be38ed8dc24525ec66\"\n  },\n  \"datasets\": {\n    \"data-8647f92b0be733be38ed8dc24525ec66\": [\n      {\n        \"Loss\": 0.9513500928878784,\n        \"Steps\": 0.0\n      },\n      {\n        \"Loss\": 0.5506610870361328,\n        \"Steps\": 1.0\n      },\n      {\n        \"Loss\": 0.36806416511535645,\n        \"Steps\": 2.0\n      },\n      {\n        \"Loss\": 0.2633008360862732,\n        \"Steps\": 3.0\n      },\n      {\n        \"Loss\": 0.19600316882133484,\n        \"Steps\": 4.0\n      },\n      {\n        \"Loss\": 0.14969676733016968,\n        \"Steps\": 5.0\n      },\n      {\n        \"Loss\": 0.11632173508405685,\n        \"Steps\": 6.0\n      },\n      {\n        \"Loss\": 0.09145359694957733,\n        \"Steps\": 7.0\n      },\n      {\n        \"Loss\": 0.07246029376983643,\n        \"Steps\": 8.0\n      },\n      {\n        \"Loss\": 0.05767849087715149,\n        \"Steps\": 9.0\n      },\n      {\n        \"Loss\": 0.046007364988327026,\n        \"Steps\": 10.0\n      },\n      {\n        \"Loss\": 0.03668995201587677,\n        \"Steps\": 11.0\n      },\n      {\n        \"Loss\": 0.029190056025981903,\n        \"Steps\": 12.0\n      },\n      {\n        \"Loss\": 0.02311750501394272,\n        \"Steps\": 13.0\n      },\n      {\n        \"Loss\": 0.01818234473466873,\n        \"Steps\": 14.0\n      },\n      {\n        \"Loss\": 0.014164857566356659,\n        \"Steps\": 15.0\n      },\n      {\n        \"Loss\": 0.010895997285842896,\n        \"Steps\": 16.0\n      },\n      {\n        \"Loss\": 0.008243605494499207,\n        \"Steps\": 17.0\n      },\n      {\n        \"Loss\": 0.006103135645389557,\n        \"Steps\": 18.0\n      },\n      {\n        \"Loss\": 0.004390940070152283,\n        \"Steps\": 19.0\n      },\n      {\n        \"Loss\": 0.0030393972992897034,\n        \"Steps\": 20.0\n      },\n      {\n        \"Loss\": 0.0019933953881263733,\n        \"Steps\": 21.0\n      },\n      {\n        \"Loss\": 0.0012075304985046387,\n        \"Steps\": 22.0\n      },\n      {\n        \"Loss\": 0.0006441846489906311,\n        \"Steps\": 23.0\n      },\n      {\n        \"Loss\": 0.00027205049991607666,\n        \"Steps\": 24.0\n      },\n      {\n        \"Loss\": 6.46933913230896e-05,\n        \"Steps\": 25.0\n      },\n      {\n        \"Loss\": 0.0,\n        \"Steps\": 26.0\n      },\n      {\n        \"Loss\": 5.891919136047363e-05,\n        \"Steps\": 27.0\n      },\n      {\n        \"Loss\": 0.00022541731595993042,\n        \"Steps\": 28.0\n      },\n      {\n        \"Loss\": 0.0004856511950492859,\n        \"Steps\": 29.0\n      },\n      {\n        \"Loss\": 0.0008278340101242065,\n        \"Steps\": 30.0\n      },\n      {\n        \"Loss\": 0.0012415125966072083,\n        \"Steps\": 31.0\n      },\n      {\n        \"Loss\": 0.0017178654670715332,\n        \"Steps\": 32.0\n      },\n      {\n        \"Loss\": 0.002249211072921753,\n        \"Steps\": 33.0\n      },\n      {\n        \"Loss\": 0.00282866507768631,\n        \"Steps\": 34.0\n      },\n      {\n        \"Loss\": 0.003450356423854828,\n        \"Steps\": 35.0\n      },\n      {\n        \"Loss\": 0.004109077155590057,\n        \"Steps\": 36.0\n      },\n      {\n        \"Loss\": 0.004800267517566681,\n        \"Steps\": 37.0\n      },\n      {\n        \"Loss\": 0.00551992654800415,\n        \"Steps\": 38.0\n      },\n      {\n        \"Loss\": 0.006264358758926392,\n        \"Steps\": 39.0\n      },\n      {\n        \"Loss\": 0.007030561566352844,\n        \"Steps\": 40.0\n      },\n      {\n        \"Loss\": 0.00781557708978653,\n        \"Steps\": 41.0\n      },\n      {\n        \"Loss\": 0.00861702486872673,\n        \"Steps\": 42.0\n      },\n      {\n        \"Loss\": 0.009432695806026459,\n        \"Steps\": 43.0\n      },\n      {\n        \"Loss\": 0.010260555893182755,\n        \"Steps\": 44.0\n      },\n      {\n        \"Loss\": 0.011098768562078476,\n        \"Steps\": 45.0\n      },\n      {\n        \"Loss\": 0.0119459368288517,\n        \"Steps\": 46.0\n      },\n      {\n        \"Loss\": 0.012800503522157669,\n        \"Steps\": 47.0\n      },\n      {\n        \"Loss\": 0.01366119459271431,\n        \"Steps\": 48.0\n      },\n      {\n        \"Loss\": 0.014526978135108948,\n        \"Steps\": 49.0\n      },\n      {\n        \"Loss\": 0.01539677381515503,\n        \"Steps\": 50.0\n      },\n      {\n        \"Loss\": 0.016269605606794357,\n        \"Steps\": 51.0\n      },\n      {\n        \"Loss\": 0.017144672572612762,\n        \"Steps\": 52.0\n      },\n      {\n        \"Loss\": 0.018021363765001297,\n        \"Steps\": 53.0\n      },\n      {\n        \"Loss\": 0.018898919224739075,\n        \"Steps\": 54.0\n      },\n      {\n        \"Loss\": 0.019776728004217148,\n        \"Steps\": 55.0\n      },\n      {\n        \"Loss\": 0.020654182881116867,\n        \"Steps\": 56.0\n      },\n      {\n        \"Loss\": 0.021530888974666595,\n        \"Steps\": 57.0\n      },\n      {\n        \"Loss\": 0.02240647003054619,\n        \"Steps\": 58.0\n      },\n      {\n        \"Loss\": 0.02328038215637207,\n        \"Steps\": 59.0\n      },\n      {\n        \"Loss\": 0.024152349680662155,\n        \"Steps\": 60.0\n      },\n      {\n        \"Loss\": 0.025022096931934357,\n        \"Steps\": 61.0\n      },\n      {\n        \"Loss\": 0.025889288634061813,\n        \"Steps\": 62.0\n      },\n      {\n        \"Loss\": 0.02675364539027214,\n        \"Steps\": 63.0\n      },\n      {\n        \"Loss\": 0.027614891529083252,\n        \"Steps\": 64.0\n      },\n      {\n        \"Loss\": 0.02847297117114067,\n        \"Steps\": 65.0\n      },\n      {\n        \"Loss\": 0.029327653348445892,\n        \"Steps\": 66.0\n      },\n      {\n        \"Loss\": 0.030178681015968323,\n        \"Steps\": 67.0\n      },\n      {\n        \"Loss\": 0.03102606162428856,\n        \"Steps\": 68.0\n      },\n      {\n        \"Loss\": 0.031869515776634216,\n        \"Steps\": 69.0\n      },\n      {\n        \"Loss\": 0.03270893916487694,\n        \"Steps\": 70.0\n      },\n      {\n        \"Loss\": 0.0335443951189518,\n        \"Steps\": 71.0\n      },\n      {\n        \"Loss\": 0.0343756340444088,\n        \"Steps\": 72.0\n      },\n      {\n        \"Loss\": 0.03520262613892555,\n        \"Steps\": 73.0\n      },\n      {\n        \"Loss\": 0.03602535277605057,\n        \"Steps\": 74.0\n      },\n      {\n        \"Loss\": 0.036843590438365936,\n        \"Steps\": 75.0\n      },\n      {\n        \"Loss\": 0.03765753284096718,\n        \"Steps\": 76.0\n      },\n      {\n        \"Loss\": 0.038466960191726685,\n        \"Steps\": 77.0\n      },\n      {\n        \"Loss\": 0.03927198797464371,\n        \"Steps\": 78.0\n      },\n      {\n        \"Loss\": 0.040072351694107056,\n        \"Steps\": 79.0\n      },\n      {\n        \"Loss\": 0.04086831212043762,\n        \"Steps\": 80.0\n      },\n      {\n        \"Loss\": 0.04165969043970108,\n        \"Steps\": 81.0\n      },\n      {\n        \"Loss\": 0.042446501553058624,\n        \"Steps\": 82.0\n      },\n      {\n        \"Loss\": 0.043228790163993835,\n        \"Steps\": 83.0\n      },\n      {\n        \"Loss\": 0.04400649666786194,\n        \"Steps\": 84.0\n      },\n      {\n        \"Loss\": 0.04477955400943756,\n        \"Steps\": 85.0\n      },\n      {\n        \"Loss\": 0.045548178255558014,\n        \"Steps\": 86.0\n      },\n      {\n        \"Loss\": 0.046312116086483,\n        \"Steps\": 87.0\n      },\n      {\n        \"Loss\": 0.047071583569049835,\n        \"Steps\": 88.0\n      },\n      {\n        \"Loss\": 0.047826580703258514,\n        \"Steps\": 89.0\n      },\n      {\n        \"Loss\": 0.04857698827981949,\n        \"Steps\": 90.0\n      },\n      {\n        \"Loss\": 0.04932296276092529,\n        \"Steps\": 91.0\n      },\n      {\n        \"Loss\": 0.05006442964076996,\n        \"Steps\": 92.0\n      },\n      {\n        \"Loss\": 0.05080140382051468,\n        \"Steps\": 93.0\n      },\n      {\n        \"Loss\": 0.0515340194106102,\n        \"Steps\": 94.0\n      },\n      {\n        \"Loss\": 0.05226223170757294,\n        \"Steps\": 95.0\n      },\n      {\n        \"Loss\": 0.05298604816198349,\n        \"Steps\": 96.0\n      },\n      {\n        \"Loss\": 0.05370552837848663,\n        \"Steps\": 97.0\n      },\n      {\n        \"Loss\": 0.05442076176404953,\n        \"Steps\": 98.0\n      }\n    ]\n  },\n  \"encoding\": {\n    \"x\": {\n      \"field\": \"Steps\",\n      \"type\": \"quantitative\"\n    },\n    \"y\": {\n      \"field\": \"Loss\",\n      \"type\": \"quantitative\"\n    }\n  },\n  \"mark\": {\n    \"type\": \"line\"\n  },\n  \"params\": [\n    {\n      \"bind\": \"scales\",\n      \"name\": \"param_1e9efca18e7a2868\",\n      \"select\": {\n        \"encodings\": [\n          \"x\",\n          \"y\"\n        ],\n        \"type\": \"interval\"\n      }\n    }\n  ],\n  \"usermeta\": {\n    \"embedOptions\": {}\n  },\n  \"width\": 350\n}"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "ZBYS",
+      "code_hash": "8373f424eb61a35dbf828ec99d1bf433",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "6fdb0bc26a05dba1af02e569fd44aa44",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "3898030ab785db4cd9e00f5f61d1c0ba",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "8251e1ac614765d25fa47612c13baae4",
+      "outputs": [],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Using device: mps\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   3.49 | Tokens / Sec:   443.3 | Learning Rate: 5.5e-06\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   2.02 | Tokens / Sec:  6012.6 | Learning Rate: 6.1e-05\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.73 | Tokens / Sec:  6061.4 | Learning Rate: 1.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.50 | Tokens / Sec:  5973.9 | Learning Rate: 1.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   1.29 | Tokens / Sec:  6011.2 | Learning Rate: 2.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.78 | Tokens / Sec:  5999.2 | Learning Rate: 2.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.55 | Tokens / Sec:  5993.9 | Learning Rate: 3.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.42 | Tokens / Sec:  6003.5 | Learning Rate: 3.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.25 | Tokens / Sec:  5950.4 | Learning Rate: 4.5e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.14 | Tokens / Sec:  6034.2 | Learning Rate: 5.0e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.11 | Tokens / Sec:  6016.5 | Learning Rate: 5.6e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  4290.5 | Learning Rate: 6.1e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.22 | Tokens / Sec:  5090.9 | Learning Rate: 6.7e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.09 | Tokens / Sec:  5169.8 | Learning Rate: 7.2e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.16 | Tokens / Sec:  5440.9 | Learning Rate: 7.8e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.16 | Tokens / Sec:  5477.8 | Learning Rate: 8.3e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.18 | Tokens / Sec:  5229.0 | Learning Rate: 8.9e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.12 | Tokens / Sec:  4646.3 | Learning Rate: 9.4e-04\nEpoch Step:      1 | Accumulation Step:   2 | Loss:   0.10 | Tokens / Sec:  4657.9 | Learning Rate: 1.0e-03\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "AjVT",
       "code_hash": null,
       "outputs": [],
       "console": []
