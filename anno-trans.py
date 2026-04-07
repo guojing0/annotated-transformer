@@ -8,46 +8,16 @@ app = marimo.App(width="medium")
 def _():
     # Some imports
 
-    import os
-    from os.path import exists
+    import copy
+    import math
+    import time
     import torch
     import torch.nn as nn
-    from torch.nn.functional import log_softmax, pad
-    import math
-    import copy
-    import time
+    from torch.nn.functional import log_softmax
     from torch.optim.lr_scheduler import LambdaLR
     import pandas as pd
     import altair as alt
-    from torch.utils.data import DataLoader
-    from torchtext.vocab import build_vocab_from_iterator
-    import torchtext.datasets as datasets
-    import spacy
-    import warnings
-    from torch.utils.data.distributed import DistributedSampler
-    import torch.distributed as dist
-    import torch.multiprocessing as mp
-    from torch.nn.parallel import DistributedDataParallel as DDP
 
-    try:
-        from torchtext.data.functional import to_map_style_dataset
-    except ImportError:
-        # torchtext versions without this helper can still use an equivalent
-        # local map-style wrapper for iterable datasets.
-        from torch.utils.data import Dataset
-
-        class _MapStyleDataset(Dataset):
-            def __init__(self, iterator):
-                self._data = list(iterator)
-
-            def __len__(self):
-                return len(self._data)
-
-            def __getitem__(self, idx):
-                return self._data[idx]
-
-        def to_map_style_dataset(iterator):
-            return _MapStyleDataset(iterator)
     return LambdaLR, alt, copy, log_softmax, math, nn, pd, time, torch
 
 
@@ -86,7 +56,7 @@ def _(torch):
             None
 
 
-    return DummyOptimizer, DummyScheduler, execute_example, show_example
+    return DummyOptimizer, DummyScheduler, show_example
 
 
 @app.cell
@@ -229,7 +199,7 @@ def _(LayerNorm, clones, nn):
 
         def __init__(self, layer, N):
             super(Decoder, self).__init__()
-            self.layers = clones(layer, 6)
+            self.layers = clones(layer, N)
             self.norm = LayerNorm(layer.size)
 
         def forward(self, x, memory, source_mask, target_mask):
@@ -433,7 +403,7 @@ def _(
             Encoder(EncoderLayer(d_model, c(attn), c(ff), dropout), N),
             Decoder(DecoderLayer(d_model, c(attn), c(attn), c(ff), dropout), N),
             nn.Sequential(Embeddings(d_model, source_vocab), c(position)),
-            nn.Sequential(Embeddings(d_model, source_vocab), c(position)),
+            nn.Sequential(Embeddings(d_model, target_vocab), c(position)),
             Generator(d_model, target_vocab),
         )
 
@@ -779,7 +749,6 @@ def _(
     LabelSmoothing,
     LambdaLR,
     data_gen,
-    execute_example,
     greedy_decode,
     make_model,
     run_epoch,
@@ -830,7 +799,588 @@ def _(
         print(greedy_decode(model, src, src_mask, max_len=max_len, start_symbol=0))
 
 
-    execute_example(example_simple_model)
+    # execute_example(example_simple_model)
+    return
+
+
+@app.cell
+def _(
+    Batch,
+    DummyOptimizer,
+    DummyScheduler,
+    LabelSmoothing,
+    LambdaLR,
+    greedy_decode,
+    make_model,
+    run_epoch,
+    torch,
+):
+    # Part 3: A real-world example with Hugging Face + Multi30k
+    import json
+    from pathlib import Path
+
+    from datasets import load_dataset
+    from tokenizers import Tokenizer
+    from tokenizers.models import WordLevel
+    from tokenizers.pre_tokenizers import Whitespace
+    from tokenizers.trainers import WordLevelTrainer
+    from torch.utils.data import DataLoader
+
+    SRC_LANG = "de"
+    TGT_LANG = "en"
+    SPECIAL_TOKENS = ["<s>", "</s>", "<blank>", "<unk>"]
+
+    PART3_CONFIGS = {
+        "paper_default": {
+            "N": 6,
+            "d_model": 512,
+            "d_ff": 2048,
+            "h": 8,
+            "dropout": 0.1,
+            "label_smoothing": 0.1,
+            "batch_size": 32,
+            "num_epochs": 8,
+            "accum_iter": 10,
+            "base_lr": 1.0,
+            "max_padding": 72,
+            "warmup": 3000,
+            "file_prefix": "multi30k_model_",
+            "tokenizer_cache_dir": "tokenizers",
+            "min_frequency": 2,
+            "max_train_sentences": None,
+            "max_valid_sentences": None,
+        },
+        "local_mps": {
+            "N": 6,
+            "d_model": 512,
+            "d_ff": 2048,
+            "h": 8,
+            "dropout": 0.1,
+            "label_smoothing": 0.1,
+            "batch_size": 8,
+            "num_epochs": 8,
+            "accum_iter": 10,
+            "base_lr": 1.0,
+            "max_padding": 72,
+            "warmup": 3000,
+            "file_prefix": "multi30k_model_",
+            "tokenizer_cache_dir": "tokenizers",
+            "min_frequency": 2,
+            "max_train_sentences": None,
+            "max_valid_sentences": None,
+        },
+    }
+
+    def get_device():
+        if torch.backends.mps.is_available():
+            return torch.device("mps")
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        return torch.device("cpu")
+
+    def _resolve_config(config_profile):
+        if isinstance(config_profile, dict):
+            return config_profile.copy()
+        if config_profile not in PART3_CONFIGS:
+            raise ValueError(
+                f"Unknown config profile '{config_profile}'. Valid: {list(PART3_CONFIGS)}"
+            )
+        return PART3_CONFIGS[config_profile].copy()
+
+    def load_hf_multi30k():
+        dataset = load_dataset("bentrevett/multi30k")
+        required_splits = {"train", "validation", "test"}
+        missing_splits = required_splits.difference(dataset.keys())
+        if missing_splits:
+            raise ValueError(f"Missing expected Multi30k splits: {sorted(missing_splits)}")
+        return dataset["train"], dataset["validation"], dataset["test"]
+
+    def _train_wordlevel_tokenizer(text_iterator, min_frequency):
+        tokenizer = Tokenizer(WordLevel(unk_token="<unk>"))
+        tokenizer.pre_tokenizer = Whitespace()
+        trainer = WordLevelTrainer(
+            min_frequency=min_frequency,
+            special_tokens=SPECIAL_TOKENS,
+        )
+        tokenizer.train_from_iterator(text_iterator, trainer=trainer)
+        return tokenizer
+
+    def _tokenizer_paths(cache_dir):
+        cache_path = Path(cache_dir)
+        return (
+            cache_path / "multi30k_de_wordlevel.json",
+            cache_path / "multi30k_en_wordlevel.json",
+        )
+
+    def load_or_build_tokenizers(
+        train_split,
+        cache_dir="tokenizers",
+        min_frequency=2,
+        force_rebuild=False,
+    ):
+        src_path, tgt_path = _tokenizer_paths(cache_dir)
+        src_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if force_rebuild or (not src_path.exists()) or (not tgt_path.exists()):
+            print("Training word-level tokenizers from Multi30k train split ...")
+            src_tokenizer = _train_wordlevel_tokenizer(
+                (row[SRC_LANG] for row in train_split),
+                min_frequency=min_frequency,
+            )
+            tgt_tokenizer = _train_wordlevel_tokenizer(
+                (row[TGT_LANG] for row in train_split),
+                min_frequency=min_frequency,
+            )
+            src_tokenizer.save(str(src_path))
+            tgt_tokenizer.save(str(tgt_path))
+        else:
+            src_tokenizer = Tokenizer.from_file(str(src_path))
+            tgt_tokenizer = Tokenizer.from_file(str(tgt_path))
+
+        return src_tokenizer, tgt_tokenizer
+
+    def _special_ids(tokenizer):
+        token_ids = {}
+        for token in SPECIAL_TOKENS:
+            token_id = tokenizer.token_to_id(token)
+            if token_id is None:
+                raise ValueError(f"Tokenizer is missing required special token: {token}")
+            token_ids[token] = token_id
+        return token_ids
+
+    def _slice_split(split, max_rows):
+        if max_rows is None:
+            return split
+        return split.select(range(min(max_rows, len(split))))
+
+    def _encode_with_special_tokens(
+        text,
+        tokenizer,
+        bos_id,
+        eos_id,
+        pad_id,
+        max_padding,
+        device,
+    ):
+        token_ids = tokenizer.encode(text).ids
+        token_ids = [bos_id] + token_ids + [eos_id]
+        if len(token_ids) > max_padding:
+            token_ids = token_ids[:max_padding]
+            token_ids[-1] = eos_id
+
+        encoded = torch.full((max_padding,), pad_id, dtype=torch.int64, device=device)
+        encoded[: len(token_ids)] = torch.tensor(
+            token_ids,
+            dtype=torch.int64,
+            device=device,
+        )
+        return encoded
+
+    def collate_batch_hf(
+        batch,
+        src_tokenizer,
+        tgt_tokenizer,
+        src_ids,
+        tgt_ids,
+        device,
+        max_padding=128,
+    ):
+        src_batch = []
+        tgt_batch = []
+        for row in batch:
+            src_batch.append(
+                _encode_with_special_tokens(
+                    row[SRC_LANG],
+                    src_tokenizer,
+                    src_ids["<s>"],
+                    src_ids["</s>"],
+                    src_ids["<blank>"],
+                    max_padding,
+                    device,
+                )
+            )
+            tgt_batch.append(
+                _encode_with_special_tokens(
+                    row[TGT_LANG],
+                    tgt_tokenizer,
+                    tgt_ids["<s>"],
+                    tgt_ids["</s>"],
+                    tgt_ids["<blank>"],
+                    max_padding,
+                    device,
+                )
+            )
+
+        return torch.stack(src_batch), torch.stack(tgt_batch)
+
+    def create_dataloaders_hf(
+        device,
+        train_split,
+        valid_split,
+        src_tokenizer,
+        tgt_tokenizer,
+        batch_size=32,
+        max_padding=72,
+        max_train_sentences=None,
+        max_valid_sentences=None,
+    ):
+        train_data = _slice_split(train_split, max_train_sentences)
+        valid_data = _slice_split(valid_split, max_valid_sentences)
+
+        src_ids = _special_ids(src_tokenizer)
+        tgt_ids = _special_ids(tgt_tokenizer)
+        if src_ids["<blank>"] != tgt_ids["<blank>"]:
+            raise ValueError("Source and target <blank> token ids must match.")
+
+        def collate_fn(batch):
+            return collate_batch_hf(
+                batch,
+                src_tokenizer,
+                tgt_tokenizer,
+                src_ids,
+                tgt_ids,
+                device,
+                max_padding=max_padding,
+            )
+
+        train_dataloader = DataLoader(
+            train_data,
+            batch_size=batch_size,
+            shuffle=True,
+            collate_fn=collate_fn,
+        )
+        valid_dataloader = DataLoader(
+            valid_data,
+            batch_size=batch_size,
+            shuffle=False,
+            collate_fn=collate_fn,
+        )
+        return train_dataloader, valid_dataloader
+
+    def _build_model_from_config(src_vocab_size, tgt_vocab_size, config, device):
+        model = make_model(
+            src_vocab_size,
+            tgt_vocab_size,
+            N=config["N"],
+            d_model=config["d_model"],
+            d_ff=config["d_ff"],
+            h=config["h"],
+            dropout=config["dropout"],
+        )
+        return model.to(device)
+
+    def train_model(
+        config_profile="local_mps",
+        force_rebuild_tokenizers=False,
+    ):
+        config = _resolve_config(config_profile)
+        device = get_device()
+        print(f"Using device: {device}")
+
+        train_split, valid_split, _ = load_hf_multi30k()
+        src_tokenizer, tgt_tokenizer = load_or_build_tokenizers(
+            train_split,
+            cache_dir=config["tokenizer_cache_dir"],
+            min_frequency=config["min_frequency"],
+            force_rebuild=force_rebuild_tokenizers,
+        )
+
+        train_dataloader, valid_dataloader = create_dataloaders_hf(
+            device=device,
+            train_split=train_split,
+            valid_split=valid_split,
+            src_tokenizer=src_tokenizer,
+            tgt_tokenizer=tgt_tokenizer,
+            batch_size=config["batch_size"],
+            max_padding=config["max_padding"],
+            max_train_sentences=config["max_train_sentences"],
+            max_valid_sentences=config["max_valid_sentences"],
+        )
+
+        src_vocab_size = src_tokenizer.get_vocab_size()
+        tgt_vocab_size = tgt_tokenizer.get_vocab_size()
+        model = _build_model_from_config(src_vocab_size, tgt_vocab_size, config, device)
+
+        pad_idx = tgt_tokenizer.token_to_id("<blank>")
+        criterion = LabelSmoothing(
+            size=tgt_vocab_size,
+            padding_idx=pad_idx,
+            smoothing=config["label_smoothing"],
+        ).to(device)
+
+        optimizer = torch.optim.Adam(
+            model.parameters(),
+            lr=config["base_lr"],
+            betas=(0.9, 0.98),
+            eps=1e-9,
+        )
+        lr_scheduler = LambdaLR(
+            optimizer=optimizer,
+            lr_lambda=lambda step: rate(
+                step,
+                model_size=config["d_model"],
+                factor=1.0,
+                warmup=config["warmup"],
+            ),
+        )
+
+        class LocalTrainState:
+            step = 0
+            accum_step = 0
+            samples = 0
+            tokens = 0
+
+        train_state = LocalTrainState()
+
+        for epoch in range(config["num_epochs"]):
+            print(f"Epoch {epoch} training")
+            model.train()
+            _, train_state = run_epoch(
+                (Batch(b[0], b[1], pad_idx) for b in train_dataloader),
+                model,
+                SimpleLossCompute(model.generator, criterion),
+                optimizer,
+                lr_scheduler,
+                mode="train+log",
+                accum_iter=config["accum_iter"],
+                train_state=train_state,
+            )
+
+            epoch_checkpoint = f"{config['file_prefix']}{epoch:02d}.pt"
+            torch.save(model.state_dict(), epoch_checkpoint)
+
+            print(f"Epoch {epoch} validation")
+            model.eval()
+            valid_loss, _ = run_epoch(
+                (Batch(b[0], b[1], pad_idx) for b in valid_dataloader),
+                model,
+                SimpleLossCompute(model.generator, criterion),
+                DummyOptimizer(),
+                DummyScheduler(),
+                mode="eval",
+            )
+            print(f"Validation loss: {float(valid_loss):.4f}")
+
+        final_checkpoint = f"{config['file_prefix']}final.pt"
+        torch.save(model.state_dict(), final_checkpoint)
+        with open(f"{config['file_prefix']}config.json", "w", encoding="utf-8") as f:
+            json.dump(config, f, indent=2, sort_keys=True)
+
+        return model, src_tokenizer, tgt_tokenizer, train_dataloader, valid_dataloader, config
+
+    def load_trained_model(
+        config_profile="local_mps",
+        force_retrain=False,
+        force_rebuild_tokenizers=False,
+    ):
+        config = _resolve_config(config_profile)
+        device = get_device()
+
+        train_split, valid_split, _ = load_hf_multi30k()
+        src_tokenizer, tgt_tokenizer = load_or_build_tokenizers(
+            train_split,
+            cache_dir=config["tokenizer_cache_dir"],
+            min_frequency=config["min_frequency"],
+            force_rebuild=force_rebuild_tokenizers,
+        )
+
+        final_checkpoint = Path(f"{config['file_prefix']}final.pt")
+        if force_retrain or not final_checkpoint.exists():
+            train_model(
+                config_profile=config,
+                force_rebuild_tokenizers=force_rebuild_tokenizers,
+            )
+
+        model = _build_model_from_config(
+            src_vocab_size=src_tokenizer.get_vocab_size(),
+            tgt_vocab_size=tgt_tokenizer.get_vocab_size(),
+            config=config,
+            device=device,
+        )
+        model.load_state_dict(torch.load(final_checkpoint, map_location=device))
+        model.eval()
+
+        _, valid_dataloader = create_dataloaders_hf(
+            device=device,
+            train_split=train_split,
+            valid_split=valid_split,
+            src_tokenizer=src_tokenizer,
+            tgt_tokenizer=tgt_tokenizer,
+            batch_size=1,
+            max_padding=config["max_padding"],
+            max_train_sentences=config["max_train_sentences"],
+            max_valid_sentences=config["max_valid_sentences"],
+        )
+        return model, src_tokenizer, tgt_tokenizer, valid_dataloader, config, device
+
+    def _tokens_from_ids(tokenizer, token_ids, pad_id, eos_token="</s>"):
+        tokens = []
+        for token_id in token_ids:
+            token_id = int(token_id)
+            if token_id == pad_id:
+                continue
+            token = tokenizer.id_to_token(token_id)
+            if token is None:
+                token = "<unk>"
+            tokens.append(token)
+            if token == eos_token:
+                break
+        return tokens
+
+    def check_outputs(
+        valid_dataloader,
+        model,
+        src_tokenizer,
+        tgt_tokenizer,
+        n_examples=5,
+    ):
+        src_pad_id = src_tokenizer.token_to_id("<blank>")
+        tgt_pad_id = tgt_tokenizer.token_to_id("<blank>")
+        if src_pad_id != tgt_pad_id:
+            raise ValueError("Source and target <blank> token ids must match.")
+        start_symbol = tgt_tokenizer.token_to_id("<s>")
+
+        results = []
+        valid_iter = iter(valid_dataloader)
+        for idx in range(n_examples):
+            try:
+                batch = next(valid_iter)
+            except StopIteration:
+                break
+
+            rb = Batch(batch[0], batch[1], tgt_pad_id)
+            model_out = greedy_decode(
+                model,
+                rb.src,
+                rb.src_mask,
+                max_len=rb.src.size(1),
+                start_symbol=start_symbol,
+            )[0]
+
+            src_tokens = _tokens_from_ids(
+                src_tokenizer,
+                rb.src[0].tolist(),
+                src_pad_id,
+            )
+            tgt_tokens = _tokens_from_ids(
+                tgt_tokenizer,
+                batch[1][0].tolist(),
+                tgt_pad_id,
+            )
+            model_tokens = _tokens_from_ids(
+                tgt_tokenizer,
+                model_out.tolist(),
+                tgt_pad_id,
+            )
+
+            print(f"\nExample {idx} ========\n")
+            print("Source Text (Input)        :", " ".join(src_tokens))
+            print("Target Text (Ground Truth) :", " ".join(tgt_tokens))
+            print("Model Output               :", " ".join(model_tokens))
+            results.append(
+                {
+                    "source_tokens": src_tokens,
+                    "target_tokens": tgt_tokens,
+                    "model_tokens": model_tokens,
+                }
+            )
+
+        return results
+
+    def run_model_example(
+        n_examples=5,
+        config_profile="local_mps",
+        force_retrain=False,
+        force_rebuild_tokenizers=False,
+    ):
+        model, src_tokenizer, tgt_tokenizer, valid_dataloader, config, device = (
+            load_trained_model(
+                config_profile=config_profile,
+                force_retrain=force_retrain,
+                force_rebuild_tokenizers=force_rebuild_tokenizers,
+            )
+        )
+        print(f"Loaded profile: {config_profile}")
+        print(f"Device: {device}")
+        return check_outputs(
+            valid_dataloader=valid_dataloader,
+            model=model,
+            src_tokenizer=src_tokenizer,
+            tgt_tokenizer=tgt_tokenizer,
+            n_examples=n_examples,
+        )
+
+    def run_part3_data_checks(config_profile="local_mps"):
+        config = _resolve_config(config_profile)
+        train_split, valid_split, test_split = load_hf_multi30k()
+        assert len(train_split) > 0 and len(valid_split) > 0 and len(test_split) > 0
+
+        src_tokenizer, tgt_tokenizer = load_or_build_tokenizers(
+            train_split,
+            cache_dir=config["tokenizer_cache_dir"],
+            min_frequency=config["min_frequency"],
+            force_rebuild=False,
+        )
+        src_ids = _special_ids(src_tokenizer)
+        tgt_ids = _special_ids(tgt_tokenizer)
+
+        sample = train_split[0]
+        src_encoded = src_tokenizer.encode(sample[SRC_LANG]).ids
+        tgt_encoded = tgt_tokenizer.encode(sample[TGT_LANG]).ids
+        assert len(src_encoded) > 0 and len(tgt_encoded) > 0
+
+        device = get_device()
+        train_dataloader, _ = create_dataloaders_hf(
+            device=device,
+            train_split=train_split,
+            valid_split=valid_split,
+            src_tokenizer=src_tokenizer,
+            tgt_tokenizer=tgt_tokenizer,
+            batch_size=2,
+            max_padding=config["max_padding"],
+            max_train_sentences=8,
+            max_valid_sentences=4,
+        )
+        batch = next(iter(train_dataloader))
+        assert batch[0].shape == batch[1].shape
+        rb = Batch(batch[0], batch[1], tgt_ids["<blank>"])
+        assert rb.src_mask.size(0) == batch[0].size(0)
+        assert rb.target_mask.size(0) == batch[1].size(0)
+
+        return {
+            "train_size": len(train_split),
+            "valid_size": len(valid_split),
+            "test_size": len(test_split),
+            "src_vocab_size": src_tokenizer.get_vocab_size(),
+            "tgt_vocab_size": tgt_tokenizer.get_vocab_size(),
+            "src_special_ids": src_ids,
+            "tgt_special_ids": tgt_ids,
+            "batch_shape": (tuple(batch[0].shape), tuple(batch[1].shape)),
+        }
+
+    def run_part3_training_smoke():
+        smoke_config = _resolve_config("local_mps")
+        smoke_config["num_epochs"] = 1
+        smoke_config["batch_size"] = 4
+        smoke_config["max_train_sentences"] = 128
+        smoke_config["max_valid_sentences"] = 64
+        smoke_config["file_prefix"] = "multi30k_smoke_"
+        train_model(config_profile=smoke_config, force_rebuild_tokenizers=False)
+        checkpoint_path = Path(f"{smoke_config['file_prefix']}final.pt")
+        if not checkpoint_path.exists():
+            raise RuntimeError("Smoke training did not produce final checkpoint.")
+        return str(checkpoint_path)
+
+    return run_part3_data_checks, run_part3_training_smoke, train_model
+
+
+@app.cell
+def _(run_part3_data_checks, run_part3_training_smoke, train_model):
+    run_part3_data_checks("local_mps")          # optional sanity checks
+    run_part3_training_smoke()                  # optional 1-epoch tiny smoke run
+    train_model("local_mps")                    # full training loop
+    # or: train_model("paper_default")
+
     return
 
 
